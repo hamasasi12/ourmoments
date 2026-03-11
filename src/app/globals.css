@@ -1,27 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAF3E0;
+  --foreground: #3a1a22;
+  --card: #ffffff;
+  --card-border: rgba(232, 165, 152, 0.3);
+  --muted: #7a6270;
+  --accent: #E8A598;
+  --wine: #6B2737;
+  --gold: #C9A84C;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #110810;
+  --foreground: #FAF3E0;
+  --card: #1e1018;
+  --card-border: rgba(201, 168, 76, 0.2);
+  --muted: #c4a0a8;
+  --accent: #C97E70;
+  --wine: #8B3A4D;
+  --gold: #DFC07A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  background-color: var(--background);
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+h1, h2, h3, h4 {
+  font-family: var(--font-playfair);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 99px; }
+
+/* ── Glass card ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px rgba(107, 39, 55, 0.08);
+}
+
+.dark .glass-card {
+  background: rgba(30, 16, 24, 0.7);
+}
+
+/* ── Romantic input ── */
+.input-romantic {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-dm-sans);
+  color: var(--foreground);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dark .input-romantic {
+  background: rgba(30, 16, 24, 0.6);
+}
+
+.input-romantic:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: linear-gradient(135deg, #6B2737, #8B3A4D);
+  color: #FAF3E0;
+  border: none;
+  border-radius: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-dm-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 39, 55, 0.35);
+}
+
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-gold {
+  background: linear-gradient(135deg, #C9A84C, #DFC07A);
+  color: #3a1a22;
+  border: none;
+  border-radius: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-dm-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--card-border);
+  color: var(--foreground);
+  border-radius: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-dm-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-outline:hover {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.06);
+  transform: translateY(-1px);
+}
+
+/* ── Film loading animation ── */
+@keyframes filmScroll {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.film-loading {
+  width: 40px;
+  height: 60px;
+  background: #111;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.film-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 8px,
+    rgba(255,255,255,0.08) 8px,
+    rgba(255,255,255,0.08) 10px
+  );
+  animation: filmScroll 0.6s linear infinite;
+}
+
+/* ── Fade animations ── */
+.animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+.animate-fade-up { animation: fadeUp 0.6s ease-out forwards; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Stagger delays ── */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* ── Love note overlay ── */
+.love-note-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(107,39,55,0.92), rgba(74,26,38,0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  padding: 1rem;
+  text-align: center;
+  color: #FAF3E0;
+  font-family: var(--font-playfair);
+  font-style: italic;
+}
+
+.group:hover .love-note-overlay { opacity: 1; }
+
+/* ── Sprocket holes (film strip) ── */
+.sprocket {
+  width: 8px;
+  height: 10px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  border: 1px solid #333;
 }

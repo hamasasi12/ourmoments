@@ -1,101 +1,119 @@
-import Image from "next/image";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import AnniversaryCountdown from '@/components/AnniversaryCountdown';
+import Link from 'next/link';
 
-export default function Home() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative overflow-hidden">
+      {/* Hero */}
+      <section className="relative min-h-[92vh] flex flex-col items-center justify-center px-4 py-20">
+        {/* Ambient gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full opacity-20 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #E8A598, transparent)' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #C9A84C, transparent)' }} />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="relative z-10 max-w-2xl w-full mx-auto text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium mb-8 animate-fade-up"
+            style={{ background: 'rgba(201,168,76,0.15)', color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.3)' }}>
+            💕 Designed for couples
+          </div>
+
+          {/* Heading */}
+          <h1 className="font-playfair text-5xl sm:text-6xl md:text-7xl font-semibold leading-tight mb-6 animate-fade-up delay-100"
+            style={{ color: 'var(--wine)' }}>
+            Every moment together,{' '}
+            <em className="italic" style={{ color: 'var(--gold)' }}>beautifully framed.</em>
+          </h1>
+
+          <p className="text-lg sm:text-xl opacity-70 mb-10 leading-relaxed animate-fade-up delay-200 font-sans">
+            Create gorgeous photoboxes from your favorite moments. Choose a frame, add a caption,
+            and keep your love story beautiful — forever.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up delay-300">
+            {session ? (
+              <>
+                <Link href="/create" className="btn-primary text-base">
+                  ✨ Create Photobox
+                </Link>
+                <Link href="/gallery" className="btn-outline text-base">
+                  💌 View Gallery
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/register" className="btn-primary text-base">
+                  Start Your Story
+                </Link>
+                <Link href="/login" className="btn-outline text-base">
+                  Sign In
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </section>
+
+      {/* Anniversary Countdown */}
+      {session && (
+        <section className="px-4 pb-20 max-w-xl mx-auto">
+          <h2 className="font-playfair text-2xl text-center mb-6" style={{ color: 'var(--wine)' }}>
+            Our Anniversary 🌹
+          </h2>
+          <AnniversaryCountdown
+            anniversaryDate={session.user.anniversaryDate}
+            partnerName={session.user.partnerName}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </section>
+      )}
+
+      {/* Features */}
+      <section className="px-4 pb-24 max-w-5xl mx-auto">
+        <h2 className="font-playfair text-3xl text-center mb-12 animate-fade-up" style={{ color: 'var(--wine)' }}>
+          Everything you need to preserve your love
+        </h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { emoji: '📸', title: 'Photobox Creator', desc: 'Upload 3 photos, pick a frame, add a caption — generate a beautiful keepsake in seconds.' },
+            { emoji: '🎨', title: '4 Unique Frames', desc: 'Film Strip, Polaroid, Soft Pink, Dark Romance — each frame tells your story differently.' },
+            { emoji: '💌', title: 'Personal Gallery', desc: 'All your photoboxes in one place. Expand, re-download, or delete anytime.' },
+            { emoji: '🔗', title: 'Share Publicly', desc: 'Generate a unique link to share your photobox with anyone — no login needed for them.' },
+            { emoji: '💕', title: 'Love Notes', desc: 'Attach a secret note to any photobox, visible on hover — just for the two of you.' },
+            { emoji: '🎉', title: 'Anniversary Countdown', desc: 'Never forget the date — a live countdown to your next anniversary on every visit.' },
+          ].map((f) => (
+            <div key={f.title} className="glass-card p-6 animate-fade-up hover:scale-[1.02] transition-transform duration-300">
+              <div className="text-3xl mb-3">{f.emoji}</div>
+              <h3 className="font-playfair text-lg font-semibold mb-2" style={{ color: 'var(--wine)' }}>
+                {f.title}
+              </h3>
+              <p className="text-sm opacity-70 leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      {!session && (
+        <section className="text-center px-4 pb-24">
+          <div className="max-w-md mx-auto glass-card p-8">
+            <h2 className="font-playfair text-2xl mb-3" style={{ color: 'var(--wine)' }}>
+              Ready to start? 💍
+            </h2>
+            <p className="opacity-70 text-sm mb-6">
+              Free to use. Create your first photobox in under 2 minutes.
+            </p>
+            <Link href="/register" className="btn-gold text-sm">
+              Create Free Account
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
