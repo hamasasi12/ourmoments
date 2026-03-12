@@ -18,6 +18,11 @@ export default function GalleryPage() {
         const url = '/api/photobox/list' + (cursor ? `?cursor=${cursor}` : '');
         const res = await fetch(url);
         const data = await res.json();
+        if (!data.items) {
+            console.error('Gallery fetch error:', data.error);
+            setLoading(false);
+            return;
+        }
         setItems((prev) => [...prev, ...data.items]);
         setCursor(data.nextCursor);
         setHasMore(!!data.nextCursor);
