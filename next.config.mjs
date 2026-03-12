@@ -6,9 +6,7 @@ const nextConfig = {
             { protocol: 'https', hostname: '**' },
         ],
     },
-    experimental: {
-        serverComponentsExternalPackages: ['pg', 'bcryptjs'],
-    },
+    serverExternalPackages: ['pg', 'bcryptjs'],
 };
 
 export default nextConfig;
